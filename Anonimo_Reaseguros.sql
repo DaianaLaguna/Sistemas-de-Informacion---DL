@@ -21,7 +21,87 @@ CREATE TABLE reaseguro_data (
 SELECT * 
 FROM public.reaseguro_data;
 
--- Crear tabla para HD (Pesos)
+-- Consultamos el total de registros en la tabla principal
+SELECT COUNT(*) AS total_registros 
+FROM public.reaseguro_data;
+
+-- Consultamos la cantidad de valores faltantes (NA) en cada columna
+SELECT 
+    'tipo_seguro' AS columna, COUNT(*) AS total_na
+FROM public.reaseguro_data
+WHERE tipo_seguro IS NULL
+UNION ALL
+SELECT 
+    'asegurado', COUNT(*)
+FROM public.reaseguro_data
+WHERE asegurado IS NULL
+UNION ALL
+SELECT 
+    'poliza_endoso', COUNT(*)
+FROM public.reaseguro_data
+WHERE poliza_endoso IS NULL
+UNION ALL
+SELECT 
+    'vig_desde', COUNT(*)
+FROM public.reaseguro_data
+WHERE vig_desde IS NULL
+UNION ALL
+SELECT 
+    'vig_hasta', COUNT(*)
+FROM public.reaseguro_data
+WHERE vig_hasta IS NULL
+UNION ALL
+SELECT 
+    'suma_asegurada', COUNT(*)
+FROM public.reaseguro_data
+WHERE suma_asegurada IS NULL
+UNION ALL
+SELECT 
+    'prima_emitida', COUNT(*)
+FROM public.reaseguro_data
+WHERE prima_emitida IS NULL
+UNION ALL
+SELECT 
+    'comisiones', COUNT(*)
+FROM public.reaseguro_data
+WHERE comisiones IS NULL
+UNION ALL
+SELECT 
+    'porc_comis_fronting', COUNT(*)
+FROM public.reaseguro_data
+WHERE porc_comis_fronting IS NULL
+UNION ALL
+SELECT 
+    'comisiones_fronting', COUNT(*)
+FROM public.reaseguro_data
+WHERE comisiones_fronting IS NULL
+UNION ALL
+SELECT 
+    'reasegurador', COUNT(*)
+FROM public.reaseguro_data
+WHERE reasegurador IS NULL
+UNION ALL
+SELECT 
+    'nombre_programa', COUNT(*)
+FROM public.reaseguro_data
+WHERE nombre_programa IS NULL
+UNION ALL
+SELECT 
+    'referencia', COUNT(*)
+FROM public.reaseguro_data
+WHERE referencia IS NULL
+UNION ALL
+SELECT 
+    'cotizacion_moneda', COUNT(*)
+FROM public.reaseguro_data
+WHERE cotizacion_moneda IS NULL
+UNION ALL
+SELECT 
+    'nro_core', COUNT(*)
+FROM public.reaseguro_data
+WHERE nro_core IS NULL;
+
+-- Creamos la tabla para HD (Pesos)
 CREATE TABLE reaseguro_hd_pesos AS
 SELECT *
 FROM public.reaseguro_data
@@ -34,7 +114,7 @@ SELECT *
 FROM reaseguro_hd_pesos
 ORDER BY EXTRACT(YEAR FROM vig_desde), poliza_endoso;
 
--- Crear tabla para HD (USD)
+-- Creamos la tabla para HD (USD)
 CREATE TABLE reaseguro_hd_usd AS
 SELECT *
 FROM public.reaseguro_data
@@ -47,7 +127,7 @@ SELECT *
 FROM reaseguro_hd_usd
 ORDER BY EXTRACT(YEAR FROM vig_desde), poliza_endoso;
 
--- Crear tabla para almacenar los datos en pesos de AXA XL
+-- Creamos la tabla para almacenar los datos en pesos de AXA XL
 CREATE TABLE reaseguro_ax_pesos AS
 SELECT *
 FROM public.reaseguro_data
@@ -60,7 +140,7 @@ SELECT *
 FROM reaseguro_ax_pesos
 ORDER BY EXTRACT(YEAR FROM vig_desde), poliza_endoso;
 
--- Crear tabla para almacenar los datos en USD de AXA XL
+-- Creamos la tabla para almacenar los datos en USD de AXA XL
 CREATE TABLE reaseguro_ax_usd AS
 SELECT *
 FROM public.reaseguro_data
@@ -118,7 +198,7 @@ FROM reaseguro_ax_usd
 GROUP BY año
 ORDER BY año;
 
--- Luego realizamos una consulta para obtener todos los casos de reaseguradores clasificados por tipo de moneda
+-- Luego realizamos una consulta para obtener todos los casos clasificados por tipo de moneda
 SELECT
     reasegurador AS grupo_reaseguradora,
     EXTRACT(YEAR FROM vig_desde) AS año,
